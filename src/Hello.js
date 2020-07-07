@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
+//import { useCountRenders } from './useCountRenders';
 
-export const Hello = () => {
-    const renders= useRef(0);
-    console.log('Hello renders: ', renders.current++)
+export const Hello = React.memo(({increment}) => {
+    // useCountRenders();
     return (
         <div>
-            Hello
+           <button onClick={()=>increment(5)}>Hello</button>
         </div>
     )
-}
+});

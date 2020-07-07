@@ -1,46 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useForm } from './useForm';
-import { useFetch } from './useFetch';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Hello } from './Hello';
-
-
+import { Square } from './Square';
 
 const App = () => {
+  const [count,setCount] = useState(0);
+  const favoriteNums = [7,21,34]
+  const increment = useCallback(n =>{
+    setCount(c => c + n)
+  },[setCount])
 
-  const [values, handleChange] = useForm({ email: '', password: '' })
-  const [count, setCount] = useState(() => JSON.parse(localStorage.getItem('count')));
-  const { data, loading } = useFetch(`http://numberapi.com/${count}/trivia`)
-  const inputRef = useRef();
-  useEffect(() => {
-    localStorage.setItem('count', JSON.stringify(count));
-  }, [count])
- const hello =useRef(()=>{
-   console.log('hello')
- })
+
   return (
     <div>
-
-      <div>
-        {loading ? 'loading...' : data}
-      </div>
-      <Hello/>
+      <Hello increment={increment}/>
       <div>count: {count}</div>
-      <button onClick={() => setCount(c => c + 1)}>button</button>
-
-      <input
-        name='email'
-        value={values.email}
-        onChange={handleChange}
-        ref={inputRef}
-        placeholder='email'
-      />
-      <input type='password' name='password' value={values.password} onChange={handleChange} />
-      <button onClick={()=> {
-        inputRef.current.focus();
-        hello.current()
-      }}>focus</button>
+      {favoriteNums.map(n => {
+        return (
+          <Square increment={increment} n={n} key={n} />
+        )
+      })}
     </div>
   )
 }
+
+
 
 export default App;
